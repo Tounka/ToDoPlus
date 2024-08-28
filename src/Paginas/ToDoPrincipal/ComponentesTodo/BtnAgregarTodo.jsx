@@ -1,7 +1,9 @@
+import { useContext } from "react";
 import styled from "styled-components";
+import { ContextoGeneral } from "../../../ContextoGeneral";
 
 const ContenedorAgregarToDo = styled.button`
-    height: 120px;
+    height: 80px;
     width: 300px;
     font-size: 30px;
 
@@ -22,10 +24,11 @@ const ContenedorAgregarToDo = styled.button`
 
 `;
 
-export const BtnAgregarToDo = () => {
 
+export const BtnAgregarToDo = () => {
+    const {setSwitchModal} = useContext(ContextoGeneral);
     const handleClic = () =>{
-        console.log('CLICK');
+        setSwitchModal(true);
     }
 
     return(
