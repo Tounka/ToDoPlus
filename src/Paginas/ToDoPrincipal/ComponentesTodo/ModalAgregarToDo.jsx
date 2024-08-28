@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import { IoCloseOutline } from "react-icons/io5";
 import { ContextoGeneral } from '../../../ContextoGeneral';
+import { Titulo } from '../../../ComponentesGenerales/Titulos';
+
 
 const ContenedorModalStyled = styled.div`
     display: ${props => props.switchModal ? 'flex' : 'none'};
@@ -51,6 +53,34 @@ const BtnCerrarModalStyled = styled.button`
     
 `;
 
+const InputToDoStyled = styled.input`
+    border: none;
+    border-radius: 10px;
+    padding:  0 10px;
+    text-wrap: wrap;
+`;
+
+const LabelInputToDoStyled = styled.label`
+
+`;
+const ContenedorInputToDoStyled = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 10px;
+`;
+
+const InputToDo = ({id, txt, type}) =>{
+    return(
+        <ContenedorInputToDoStyled>
+            <LabelInputToDoStyled htmlFor={id} > {txt} </LabelInputToDoStyled>
+            <InputToDoStyled id={id} type={type} ></InputToDoStyled>
+            
+        </ContenedorInputToDoStyled>
+    )
+};
+
+
+
 export const ModalAgregarToDo = () => {
     const modalContainer = document.querySelector("#modalAgregarItem");
     const {setSwitchModal, switchModal} = useContext(ContextoGeneral);
@@ -71,8 +101,9 @@ export const ModalAgregarToDo = () => {
             <ContenedorFormulario>
 
              <BtnCerrarModalStyled onClick={() => handleClickBtnCerrar()} > <IoCloseOutline /> </BtnCerrarModalStyled>
+                <Titulo>Ingresa una Tarea</Titulo>
 
-
+                <InputToDo id='Descripción' txt = 'Descripción' type='text' />
 
             </ContenedorFormulario>
         </ContenedorModalStyled>,
