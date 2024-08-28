@@ -4,4 +4,6 @@ export const Titulo = styled.h2`
     font-size: 28px;
     font-weight: bold;
     text-align: center;
+
+    margin-bottom: 10px;
 `;
