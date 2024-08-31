@@ -37,6 +37,8 @@ const CheckboxStyled = styled.input`
 
 const TxtTarea = styled.label`
     width: 100%;
+    min-width: 240px;
+    text-wrap: wrap;
     height: 100%;
     font-size: 16px;
     line-height: 1.5;
