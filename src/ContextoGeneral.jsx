@@ -2,11 +2,17 @@ import React, { createContext, useEffect, useState } from 'react';
 import { db } from './Firestore'; // Asegúrate de que esta ruta sea correcta
 import { doc, getDoc, collection, addDoc, query, getDocs, orderBy } from "firebase/firestore";
 
-// Crear el contexto
 const ContextoGeneral = createContext();
 
 const ContextoProviderGeneral = ({ children }) => {
-  // Crear un estado
+ 
+  const [actualizadorTareas, setActualizadorTareas] = useState(0);
+
+  const fnActualizadorTareas = () => {
+    setActualizadorTareas(actualizadorTareas + 1);
+    console.log("se acualizas")
+  };
+
   const [switchModal, setSwitchModal] = useState(false);
   const [tareas, setTareas] = useState({ tareasDiaria: [], tareasRecurrentes: [] });
 
@@ -22,7 +28,7 @@ const ContextoProviderGeneral = ({ children }) => {
         }));
   
         // Ordena las tareas diarias por valor
-        tareasDiariasList.sort((a, b) => a.valor - b.valor); // Ordenar de menor a mayor
+      
   
         // Obtén las tareas recurrentes
         const tareasRecurrentesQuery = query(collection(db, "TareasRecurrentes"), orderBy("valor", "desc"));
@@ -33,10 +39,10 @@ const ContextoProviderGeneral = ({ children }) => {
         }));
     
         // Ordena las tareas recurrentes por valor
-        tareasDiariasList.sort((a, b) => a.valor - b.valor); // Ordenar de menor a mayor
+        // Ordenar de menor a mayor
   
         setTareas({
-          tareasDiaria: tareasDiariasList.sort((a, b) => a.valor + b.valor),
+          tareasDiaria: tareasDiariasList,
           tareasRecurrentes: tareasRecurrentesList
         });
       } catch (error) {
@@ -45,7 +51,7 @@ const ContextoProviderGeneral = ({ children }) => {
     };
   
     fetchTareas();
-  }, []);
+  }, [actualizadorTareas]);
   
 
   const agregarDocumento = async (tarea, boolTarea) => {
@@ -62,7 +68,7 @@ const ContextoProviderGeneral = ({ children }) => {
   };
 
   return (
-    <ContextoGeneral.Provider value={{ switchModal, setSwitchModal, tareas, agregarDocumento }}>
+    <ContextoGeneral.Provider value={{ switchModal, setSwitchModal, tareas, agregarDocumento, fnActualizadorTareas }}>
       {children}
     </ContextoGeneral.Provider>
   );

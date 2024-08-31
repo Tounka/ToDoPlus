@@ -19,10 +19,15 @@ html {
 }
 
 :root {
-  --color-principal: #F8F7F2;
-  --color-verde: #2ecc71;
-  --color-azul: #9EB5B9;
-  --color-rojo: #B92424;
+  --color-principal: #39928C;
+  --color-blanco: #EBFCFB;
+  --color-blanco-transparente: #ebfcfbac;
+  
+  --color-morado: #9B7EDE;
+  --color-rojo: #984447;
+  --color-verde: #39928C;
+  --color-azul: #102E4A;
+
   --color-rosa: #F2CEC7;
   --color-amarillo: #f39c12;
 }

@@ -9,7 +9,23 @@ const ContenedorTemporal = styled.div`
     align-items: center;
     flex-direction: column;
     gap: 20px;
+    width: 600px;
+    max-width: 90%;
+    min-height: 600px;
+
+    border: 4px solid var(--color-blanco-transparente);
+    padding: 20px;
+    border-radius: 20px;
 `;
+const ContenedorTareas = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+`;
+
+
 export const ToDoUx = () =>{
     const {tareas} = useContext(ContextoGeneral);
     console.log("11111", tareas)
@@ -17,16 +33,20 @@ export const ToDoUx = () =>{
     <ContenedorTemporal>
 
         <BtnAgregarToDo />
+
+        <ContenedorTareas>
             {tareas.tareasRecurrentes.map((tarea) => (
-                <ItemToDoList key={tarea.id} txtTarea={tarea.txtTarea} />
+                <ItemToDoList key={tarea.id} id={tarea.id} txtTarea={tarea.txtTarea} color={true} />
             ))}
 
             {tareas.tareasDiaria.map((tarea) => (
-                <ItemToDoList key={tarea.id} txtTarea={tarea.txtTarea} />
+                <ItemToDoList key={tarea.id} id={tarea.id} txtTarea={tarea.txtTarea}  />
             ))}
+        </ContenedorTareas>
+    
            
 
-        <ItemToDoList />
+       
     </ContenedorTemporal>
     )
    }

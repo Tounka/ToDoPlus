@@ -15,7 +15,7 @@ const ContenedorAgregarToDo = styled.button`
 
     border-radius: 20px;
     border: none;
-    background-color: var(--color-azul);
+    background-color: var(--color-blanco);
     color: var(--color-principal);
 
     &:hover{
@@ -26,9 +26,10 @@ const ContenedorAgregarToDo = styled.button`
 
 
 export const BtnAgregarToDo = () => {
-    const {setSwitchModal} = useContext(ContextoGeneral);
+    const {setSwitchModal, fnActualizadorTareas} = useContext(ContextoGeneral);
     const handleClic = () =>{
         setSwitchModal(true);
+        fnActualizadorTareas();
     }
 
     return(
