@@ -2,7 +2,7 @@ import { useContext } from "react";
 import styled from "styled-components";
 import { ContextoGeneral } from "../../../ContextoGeneral";
 
-const ContenedorAgregarToDo = styled.button`
+const ContenedorToDo = styled.button`
     height: 80px;
     width: 300px;
     font-size: 30px;
@@ -25,16 +25,21 @@ const ContenedorAgregarToDo = styled.button`
 `;
 
 
-export const BtnAgregarToDo = () => {
-    const {setSwitchModal, fnActualizadorTareas} = useContext(ContextoGeneral);
+export const BtnToDo = ({fn, txt}) => {
+    const {setSwitchModal} = useContext(ContextoGeneral);
+
     const handleClic = () =>{
-        setSwitchModal(true);
-        fnActualizadorTareas();
+        if(fn === 1){
+            setSwitchModal(true);
+            
+        } else if (typeof fn === 'function') {
+            fn(); 
+        }
     }
 
     return(
-        <ContenedorAgregarToDo type="input" onClick={() => handleClic()} >
-            Agregar Tarea
-        </ContenedorAgregarToDo>
+        <ContenedorToDo type="input" onClick={handleClic}>
+            {txt}
+        </ContenedorToDo>
     )
 }

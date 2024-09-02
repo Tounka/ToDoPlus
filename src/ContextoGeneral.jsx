@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { db } from './Firestore'; // Asegúrate de que esta ruta sea correcta
-import { doc, getDoc, collection, addDoc, query, getDocs, orderBy } from "firebase/firestore";
+import { doc, getDoc, collection, addDoc, query, getDocs, orderBy, updateDoc } from "firebase/firestore";
 
 const ContextoGeneral = createContext();
 
@@ -9,7 +9,7 @@ const ContextoProviderGeneral = ({ children }) => {
   const [actualizadorTareas, setActualizadorTareas] = useState(0);
 
   const fnActualizadorTareas = () => {
-    setActualizadorTareas(actualizadorTareas + 1);
+    setActualizadorTareas(actualizadorTareas + 1 );
     console.log("se acualizas")
   };
 
@@ -19,7 +19,7 @@ const ContextoProviderGeneral = ({ children }) => {
   useEffect(() => {
     const fetchTareas = async () => {
       try {
-        // Obtén las tareas diarias
+ 
         const tareasDiariasQuery = query(collection(db, "TareasDiarias"),orderBy("valor", "desc"));
         const tareasDiariasSnapshot = await getDocs(tareasDiariasQuery);
         const tareasDiariasList = tareasDiariasSnapshot.docs.map(doc => ({
@@ -27,10 +27,7 @@ const ContextoProviderGeneral = ({ children }) => {
           ...doc.data()
         }));
   
-        // Ordena las tareas diarias por valor
-      
-  
-        // Obtén las tareas recurrentes
+
         const tareasRecurrentesQuery = query(collection(db, "TareasRecurrentes"), orderBy("valor", "desc"));
         const tareasRecurrentesSnapshot = await getDocs(tareasRecurrentesQuery);
         const tareasRecurrentesList = tareasRecurrentesSnapshot.docs.map(doc => ({
@@ -38,13 +35,13 @@ const ContextoProviderGeneral = ({ children }) => {
           ...doc.data()
         }));
     
-        // Ordena las tareas recurrentes por valor
-        // Ordenar de menor a mayor
+     
   
         setTareas({
           tareasDiaria: tareasDiariasList,
           tareasRecurrentes: tareasRecurrentesList
         });
+        console.log(tareas);
       } catch (error) {
         console.error("Error fetching tasks: ", error);
       }
@@ -66,9 +63,23 @@ const ContextoProviderGeneral = ({ children }) => {
       console.error("Error adding document: ", e);
     }
   };
+  
+
+  const actualizarDocumento = async (idDocumento, boolTarea, nuevosValores) => {
+    try {
+      const tipoTarea = boolTarea ? "TareasRecurrentes" : "TareasDiarias";
+      const docRef = doc(db, tipoTarea, idDocumento);
+  
+      await updateDoc(docRef, nuevosValores);
+  
+      console.log("Documento actualizado con éxito:", idDocumento);
+    } catch (error) {
+      console.error("Error actualizando el documento: ", error);
+    }
+  };
 
   return (
-    <ContextoGeneral.Provider value={{ switchModal, setSwitchModal, tareas, agregarDocumento, fnActualizadorTareas }}>
+    <ContextoGeneral.Provider value={{ switchModal, setSwitchModal, tareas, agregarDocumento, fnActualizadorTareas, actualizarDocumento }}>
       {children}
     </ContextoGeneral.Provider>
   );

@@ -54,19 +54,21 @@ const TxtTarea = styled.label`
     align-items: center;
 `;
 
-export const ItemToDoList = ({ txtTarea = 'Programar', id=1, color }) => {
-    const [estadoTarea, setEstadoTarea] = useState(false);
+export const ItemToDoList = ({ tarea, color, registrarCambio }) => {
+    const [estadoTarea, setEstadoTarea] = useState(tarea.estado);
 
     const handleCheckbox = (event) => {
-        setEstadoTarea(event.target.checked);
-        
+        const nuevoEstado = event.target.checked;
+        setEstadoTarea(nuevoEstado);
+        registrarCambio({ ...tarea, estado: nuevoEstado });
     };
+
     return (
         <ContenedorItemToDoStyled>
-            
-                <CheckboxStyled id={id} type="checkbox" checked={estadoTarea} onChange={handleCheckbox} />
-                <TxtTarea htmlFor={id} estadoTarea= {estadoTarea} color={color} >{txtTarea}</TxtTarea>
-                
+            <CheckboxStyled id={tarea.id} type="checkbox" checked={estadoTarea} onChange={handleCheckbox} />
+            <TxtTarea htmlFor={tarea.id} estadoTarea={estadoTarea} color={color}>
+                {tarea.txtTarea}
+            </TxtTarea>
         </ContenedorItemToDoStyled>
     );
 };

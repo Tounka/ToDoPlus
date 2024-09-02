@@ -313,8 +313,15 @@ export const ModalAgregarToDo = () => {
     const [fecha, setFecha] = useState(new Date());
     const [valor, setValor] = useState(3);
 
-    const { agregarDocumento } = useContext(ContextoGeneral);
-
+    const { agregarDocumento, fnActualizadorTareas } = useContext(ContextoGeneral);
+    const formateoDeEstados = () =>{
+        setTxtTarea("");
+        setEstado(false);
+        setBoolTareaRecurrente(false);
+        setFecha(new Date());
+        setValor(3);
+    }
+    
     const handleSubmit = (event) => {
         event.preventDefault();
         
@@ -328,9 +335,12 @@ export const ModalAgregarToDo = () => {
         const objTarea = {boolTareaRecurrente, txtTarea,estado, valor, fecha}
         agregarDocumento(objTarea, boolTareaRecurrente);
         setSwitchModal(false);
+        fnActualizadorTareas();
+        formateoDeEstados();
     }
 
-    const handleClickBtnCerrar = () =>{
+    const handleClickBtnCerrar = (event) =>{
+        event.preventDefault();
         setSwitchModal(false);
     }
 
@@ -341,7 +351,7 @@ export const ModalAgregarToDo = () => {
             <ContenedorFormulario onSubmit={handleSubmit}>
                 <ContenedorInputs>
                 
-                    <BtnCerrarModalStyled onClick={() => handleClickBtnCerrar()} > <IoCloseOutline /> </BtnCerrarModalStyled>
+                    <BtnCerrarModalStyled onClick={handleClickBtnCerrar} > <IoCloseOutline /> </BtnCerrarModalStyled>
                     <Titulo>Ingresa una Tarea</Titulo>
 
                     <InputToDoGenerico id='Descripción' txt = 'Descripción' type='text' setEstado = {setTxtTarea} />

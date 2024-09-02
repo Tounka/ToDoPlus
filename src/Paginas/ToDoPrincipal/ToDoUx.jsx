@@ -1,9 +1,10 @@
 
-import { useContext } from "react";
-import { BtnAgregarToDo } from "./ComponentesTodo/BtnAgregarTodo"
+import { useContext, useState } from "react";
+import { BtnToDo } from "./ComponentesTodo/BtnAgregarTodo"
 import { ItemToDoList } from "./ComponentesTodo/ToDoItem"
 import styled from "styled-components";
 import { ContextoGeneral } from "../../ContextoGeneral";
+
 const ContenedorTemporal = styled.div`
     display: flex;
     align-items: center;
@@ -26,27 +27,58 @@ const ContenedorTareas = styled.div`
 `;
 
 
-export const ToDoUx = () =>{
-    const {tareas} = useContext(ContextoGeneral);
-    console.log("11111", tareas)
-    return(
-    <ContenedorTemporal>
 
-        <BtnAgregarToDo />
+export const ToDoUx = () => {
+    const { tareas, actualizarDocumento } = useContext(ContextoGeneral);
+    const [tareasModificadas, setTareasModificadas] = useState([]);
 
-        <ContenedorTareas>
-            {tareas.tareasRecurrentes.map((tarea) => (
-                <ItemToDoList key={tarea.id} id={tarea.id} txtTarea={tarea.txtTarea} color={true} />
-            ))}
+    const registrarCambio = (tareaModificada) => {
+        setTareasModificadas((prevState) => {
+            const existe = prevState.find((tarea) => tarea.id === tareaModificada.id);
+            if (existe) {
+                return prevState.map((tarea) =>
+                    tarea.id === tareaModificada.id ? tareaModificada : tarea
+                );
+            } else {
+                return [...prevState, tareaModificada];
+            }
+        });
+        console.log(tareasModificadas);
+    };
 
-            {tareas.tareasDiaria.map((tarea) => (
-                <ItemToDoList key={tarea.id} id={tarea.id} txtTarea={tarea.txtTarea}  />
-            ))}
-        </ContenedorTareas>
-    
-           
+    const handleSincronizar = () => {
+        tareasModificadas.forEach((tarea) => {
+            actualizarDocumento(tarea.id, tarea.boolTareaRecurrente, tarea);
+        });
 
-       
-    </ContenedorTemporal>
-    )
-   }
+        // Limpiar el estado después de sincronizar
+        setTareasModificadas([]);
+    };
+
+    return (
+        <ContenedorTemporal>
+            <BtnToDo fn={1} txt="Agregar Tarea" />
+
+            <ContenedorTareas>
+                {tareas.tareasRecurrentes.map((tarea) => (
+                    <ItemToDoList
+                        key={tarea.id}
+                        tarea={tarea}
+                        color={true}
+                        registrarCambio={registrarCambio}
+                    />
+                ))}
+
+                {tareas.tareasDiaria.map((tarea) => (
+                    <ItemToDoList
+                        key={tarea.id}
+                        tarea={tarea}
+                        registrarCambio={registrarCambio}
+                    />
+                ))}
+            </ContenedorTareas>
+
+            <BtnToDo fn={handleSincronizar} txt="Sincronizar" /> {/* Aquí pasas la función */}
+        </ContenedorTemporal>
+    );
+};
