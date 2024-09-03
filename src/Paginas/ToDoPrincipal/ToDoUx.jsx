@@ -8,6 +8,7 @@ import { ContextoGeneral } from "../../ContextoGeneral";
 const ContenedorTemporal = styled.div`
     display: flex;
     align-items: center;
+    justify-content: space-between;
     flex-direction: column;
     gap: 20px;
     width: 600px;
@@ -26,7 +27,7 @@ const ContenedorTareas = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 10px;
     max-width: 100%;
 
 `;

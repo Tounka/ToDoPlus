@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { db } from './Firestore'; // Asegúrate de que esta ruta sea correcta
-import { doc, getDoc, collection, addDoc, query, getDocs, orderBy, updateDoc } from "firebase/firestore";
+import { doc, getDoc, collection, addDoc, query, getDocs, orderBy, updateDoc, Timestamp, where } from "firebase/firestore";
 
 const ContextoGeneral = createContext();
 
@@ -16,16 +16,39 @@ const ContextoProviderGeneral = ({ children }) => {
   const [switchModal, setSwitchModal] = useState(false);
   const [tareas, setTareas] = useState({ tareasDiaria: [], tareasRecurrentes: [] });
 
+
   useEffect(() => {
+ 
+
+
+
     const fetchTareas = async () => {
       try {
  
-        const tareasDiariasQuery = query(collection(db, "TareasDiarias"),orderBy("valor", "desc"));
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const timestampStart = Timestamp.fromDate(today);
+
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+        const timestampEnd = Timestamp.fromDate(tomorrow);
+
+        console.log(today)
+
+        // Consulta para tareas diarias de hoy
+        const tareasDiariasQuery = query(
+          collection(db, "TareasDiarias"),
+          where("fecha", ">=", timestampStart),
+          where("fecha", "<", timestampEnd),
+         
+          orderBy("fecha", "asc")
+        );
         const tareasDiariasSnapshot = await getDocs(tareasDiariasQuery);
         const tareasDiariasList = tareasDiariasSnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         }));
+
   
 
         const tareasRecurrentesQuery = query(collection(db, "TareasRecurrentes"), orderBy("valor", "desc"));

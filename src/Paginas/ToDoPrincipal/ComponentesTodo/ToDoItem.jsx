@@ -9,6 +9,7 @@ const ContenedorItemToDoStyled = styled.div`
     grid-template-columns: 35px auto 35px;
     gap: 15px;
     align-items: center;
+    
 `;
 const BtnEspecialStyled =  styled.div`
     display: flex;
@@ -56,20 +57,21 @@ const CheckboxStyled = styled.input`
 const TxtTarea = styled.label`
     width: 100%;
     
-    text-wrap: wrap;
+    text-wrap: prety;
     height: 100%;
     font-size: 16px;
     line-height: 1.5;
     font-size: 18px;
     text-decoration: ${props => props.estadoTarea ? 'line-through' : ''};
-    background-color: ${props => props.estadoTarea ? 'var(--color-morado)' : 'var(--color-blanco-transparente)'};
+    background-color: ${props => props.estadoTarea ? 'var(--color-azul)' : (props.color ? 'var(--color-morado)' : 'var(--color-blanco-transparente)')};
+    user-select: none;
 
-    color: ${props => props.color ? 'red' : ''} ;
+    color:  ${props => props.estadoTarea ? 'var(--color-amarillo)' : 'var(--color-azul)'} ;
     user-select: none;
     padding-left: 10px;
     border-radius: 5px 20px 20px 5px;
 
-    color: var(--color-azul);
+    
     display: flex;
     align-items: center;
 `;

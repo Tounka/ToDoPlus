@@ -6,6 +6,7 @@ import { ContextoGeneral } from '../../../ContextoGeneral';
 import { Titulo } from '../../../ComponentesGenerales/Titulos';
 
 
+
 const ContenedorModalStyled = styled.div`
     display: ${props => props.switchModal ? 'flex' : 'none'};
     position: absolute;
@@ -172,9 +173,12 @@ const InputToDoDate = ({id, bool, vertical, setEstado}) =>{
         }
     }
     const handleChange = (event) => {
-        const valor = event.target.value; // Valor en formato YYYY-MM-DD
-        const fecha = new Date(valor); // Convierte la cadena a un objeto Date
-        setEstado(fecha); // Actualiza el estado con el objeto Date
+        const valor = event.target.value; 
+        const [year, month, day] = valor.split('-');
+
+        const fecha = new Date(year, month - 1, day); 
+        
+        setEstado(fecha); // Guarda la fecha en el estado
     };
     return(
         <ContenedorInputToDoStyled vertical= {vertical}  >
@@ -229,7 +233,7 @@ const ContenedorHorizontal = styled.div`
 
 const ContenedorSwitchStyled = styled.div `
     display: grid;
-    grid-template-columns: ${props => props.bool ? "2fr  1fr" : "1fr 2fr"};
+    grid-template-columns: ${props => props.bool ? "1fr 2fr" : "2fr 1fr"};
     transition: .2s ease;
     width: 100%;
     height: 100%;
@@ -293,9 +297,9 @@ const InputToDoSelectorBool = ({id, txt, type, vertical, bool, setBoolTareaRecur
         <ContenedorInputToDoStyled vertical= {vertical}  >
             <LabelInputToDoStyled vertical= {vertical} > {txt} </LabelInputToDoStyled>
                 <ContenedorSwitchStyled bool = {bool} >
-                    <ButtonSwitch type='button' bg= "var(--color-verde)" onClick={() => handleClick(true)} > Si </ButtonSwitch >
+                    <ButtonSwitch type='button' bg= "var(--color-verde)" onClick={() => handleClick(false)} > Si </ButtonSwitch >
                     
-                    <ButtonSwitch type='button' bg= "var(--color-rojo)" onClick={() => handleClick(false)} > No </ButtonSwitch >
+                    <ButtonSwitch type='button' bg= "var(--color-rojo)" onClick={() => handleClick(true)} > No </ButtonSwitch >
                 </ContenedorSwitchStyled>
         </ContenedorInputToDoStyled>
     )
@@ -314,11 +318,12 @@ export const ModalAgregarToDo = () => {
     const [valor, setValor] = useState(3);
 
     const { agregarDocumento, fnActualizadorTareas } = useContext(ContextoGeneral);
+
     const formateoDeEstados = () =>{
         setTxtTarea("");
         setEstado(false);
         setBoolTareaRecurrente(false);
-        setFecha(new Date());
+        setFecha(new Date() );
         setValor(3);
     }
     
@@ -357,7 +362,7 @@ export const ModalAgregarToDo = () => {
                     <InputToDoGenerico id='Descripción' txt = 'Descripción' type='text' setEstado = {setTxtTarea} />
                     
                     <ContenedorHorizontal>
-                        <InputToDoSelectorBool vertical={"vertical"} txt = "Es recurrente?" bool = {boolTareaRecurrente} setBoolTareaRecurrente = {setBoolTareaRecurrente}/>
+                        <InputToDoSelectorBool vertical={"vertical"} txt = "Es diaria?" bool = {boolTareaRecurrente} setBoolTareaRecurrente = {setBoolTareaRecurrente}/>
                         <InputToDoDate id='Fecha' txt = 'Fecha' type='date' vertical  bool  = {boolTareaRecurrente} setEstado = {setFecha} />
                     </ContenedorHorizontal>
 
