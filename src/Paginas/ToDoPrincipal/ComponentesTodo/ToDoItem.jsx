@@ -1,15 +1,34 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { MdDelete, MdEdit } from "react-icons/md";
 
 const ContenedorItemToDoStyled = styled.div`
     width: 600px;
-    max-width: 90%;
+    max-width: 100%;
     display: grid;
-    grid-template-columns: 35px auto;
+    grid-template-columns: 35px auto 50px;
     gap: 15px;
     align-items: center;
 `;
-
+const BtnEspecialStyled =  styled.div`
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    color: var(--color-morado);
+    cursor: pointer;
+`;
+const ContenedoresBtnStyled = styled.div`
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    background-color: white;
+    height: 100%;
+    width: 100%;
+    
+    border-radius: 10px;
+    
+    
+`;
 const CheckboxStyled = styled.input`
     width: 35px;
     height: 35px;
@@ -35,7 +54,7 @@ const CheckboxStyled = styled.input`
 
 const TxtTarea = styled.label`
     width: 100%;
-    min-width: 240px;
+    
     text-wrap: wrap;
     height: 100%;
     font-size: 16px;
@@ -54,6 +73,17 @@ const TxtTarea = styled.label`
     align-items: center;
 `;
 
+
+
+const BtnEspecial = ({icon, fn}) =>{
+
+    return(
+        <BtnEspecialStyled>
+            {icon}
+        </BtnEspecialStyled>
+    )
+}
+
 export const ItemToDoList = ({ tarea, color, registrarCambio }) => {
     const [estadoTarea, setEstadoTarea] = useState(tarea.estado);
 
@@ -65,10 +95,18 @@ export const ItemToDoList = ({ tarea, color, registrarCambio }) => {
 
     return (
         <ContenedorItemToDoStyled>
+
             <CheckboxStyled id={tarea.id} type="checkbox" checked={estadoTarea} onChange={handleCheckbox} />
+
             <TxtTarea htmlFor={tarea.id} estadoTarea={estadoTarea} color={color}>
                 {tarea.txtTarea}
             </TxtTarea>
+
+            <ContenedoresBtnStyled>
+                <BtnEspecial icon = {<MdDelete />} />
+                <BtnEspecial icon = {<MdEdit />} />
+            </ContenedoresBtnStyled>
+        
         </ContenedorItemToDoStyled>
     );
 };

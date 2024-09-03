@@ -17,12 +17,17 @@ const ContenedorTemporal = styled.div`
     border: 4px solid var(--color-blanco-transparente);
     padding: 20px;
     border-radius: 20px;
+
+    @media (max-width: 400px){
+        gap:10px;
+    }
 `;
 const ContenedorTareas = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 4px;
+    max-width: 100%;
 
 `;
 

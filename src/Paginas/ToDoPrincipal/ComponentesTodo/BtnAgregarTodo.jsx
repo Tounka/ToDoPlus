@@ -21,7 +21,10 @@ const ContenedorToDo = styled.button`
     &:hover{
         opacity: .95;
     }
-
+    @media (max-width: 400px) {
+        width: 240px;
+        height: 60px;
+    }
 `;
 
 
