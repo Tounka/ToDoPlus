@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/ToDoPlus/build/static/css/main.2c841851.css",
+    "main.js": "/ToDoPlus/build/static/js/main.6a1e1345.js",
+    "index.html": "/ToDoPlus/build/index.html",
+    "main.2c841851.css.map": "/ToDoPlus/build/static/css/main.2c841851.css.map",
+    "main.6a1e1345.js.map": "/ToDoPlus/build/static/js/main.6a1e1345.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2c841851.css",
+    "static/js/main.6a1e1345.js"
+  ]
+}
