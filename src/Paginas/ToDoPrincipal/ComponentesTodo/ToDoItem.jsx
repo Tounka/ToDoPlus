@@ -1,18 +1,19 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 
 const ContenedorItemToDoStyled = styled.div`
     width: 600px;
     max-width: 100%;
     display: grid;
-    grid-template-columns: 35px auto 50px;
+    grid-template-columns: 35px auto 35px;
     gap: 15px;
     align-items: center;
 `;
 const BtnEspecialStyled =  styled.div`
     display: flex;
     align-items: center;
+    
     font-size: 24px;
     color: var(--color-morado);
     cursor: pointer;
@@ -22,7 +23,7 @@ const ContenedoresBtnStyled = styled.div`
     justify-content:space-around;
     align-items: center;
     background-color: white;
-    height: 100%;
+    height: 35px;
     width: 100%;
     
     border-radius: 10px;
@@ -103,7 +104,6 @@ export const ItemToDoList = ({ tarea, color, registrarCambio }) => {
             </TxtTarea>
 
             <ContenedoresBtnStyled>
-                <BtnEspecial icon = {<MdDelete />} />
                 <BtnEspecial icon = {<MdEdit />} />
             </ContenedoresBtnStyled>
         
