@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import { MdEdit } from "react-icons/md";
+import { ContextoGeneral } from "../../../ContextoGeneral";
 
 const ContenedorItemToDoStyled = styled.div`
     width: 600px;
@@ -9,6 +10,7 @@ const ContenedorItemToDoStyled = styled.div`
     grid-template-columns: 35px auto 35px;
     gap: 15px;
     align-items: center;
+    
     
 `;
 const BtnEspecialStyled =  styled.div`
@@ -89,12 +91,18 @@ const BtnEspecial = ({icon, fn}) =>{
 
 export const ItemToDoList = ({ tarea, color, registrarCambio }) => {
     const [estadoTarea, setEstadoTarea] = useState(tarea.estado);
-
+    const {setTareaEnFoco, setSwitchModal} = useContext(ContextoGeneral);
     const handleCheckbox = (event) => {
         const nuevoEstado = event.target.checked;
         setEstadoTarea(nuevoEstado);
         registrarCambio({ ...tarea, estado: nuevoEstado });
     };
+    
+    const handleClickEditar = (tarea) =>{
+        setTareaEnFoco(tarea);
+        setSwitchModal(true);
+        
+    }
 
     return (
         <ContenedorItemToDoStyled>
@@ -105,7 +113,7 @@ export const ItemToDoList = ({ tarea, color, registrarCambio }) => {
                 {tarea.txtTarea}
             </TxtTarea>
 
-            <ContenedoresBtnStyled>
+            <ContenedoresBtnStyled onClick={() => handleClickEditar(tarea)}>
                 <BtnEspecial icon = {<MdEdit />} />
             </ContenedoresBtnStyled>
         

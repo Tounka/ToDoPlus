@@ -29,11 +29,12 @@ const ContenedorToDo = styled.button`
 
 
 export const BtnToDo = ({fn, txt}) => {
-    const {setSwitchModal} = useContext(ContextoGeneral);
+    const {setSwitchModal,setTareaEnFoco} = useContext(ContextoGeneral);
 
     const handleClic = () =>{
         if(fn === 1){
             setSwitchModal(true);
+            setTareaEnFoco();
             
         } else if (typeof fn === 'function') {
             fn(); 

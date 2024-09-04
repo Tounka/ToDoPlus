@@ -7,7 +7,7 @@ const ContextoGeneral = createContext();
 const ContextoProviderGeneral = ({ children }) => {
  
   const [actualizadorTareas, setActualizadorTareas] = useState(0);
-
+  const [tareaEnFoco, setTareaEnFoco] = useState();
   const fnActualizadorTareas = () => {
     setActualizadorTareas(actualizadorTareas + 1 );
     console.log("se acualizas")
@@ -102,7 +102,7 @@ const ContextoProviderGeneral = ({ children }) => {
   };
 
   return (
-    <ContextoGeneral.Provider value={{ switchModal, setSwitchModal, tareas, agregarDocumento, fnActualizadorTareas, actualizarDocumento }}>
+    <ContextoGeneral.Provider value={{ switchModal, setSwitchModal, tareas, agregarDocumento, fnActualizadorTareas, actualizarDocumento, tareaEnFoco, setTareaEnFoco }}>
       {children}
     </ContextoGeneral.Provider>
   );

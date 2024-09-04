@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import { IoCloseOutline } from "react-icons/io5";
@@ -151,20 +151,20 @@ const ContenedorInputToDoStyled = styled.div`
 `;
 
 
-const InputToDoGenerico = ({id, txt, type, vertical, propsInput, setEstado }) =>{
+const InputToDoGenerico = ({id, txt, type, vertical, propsInput, setEstado, estado }) =>{
     const handleChange = (event) =>{
         setEstado(event.target.value);
     }
     return(
         <ContenedorInputToDoStyled vertical= {vertical}  >
             <LabelInputToDoStyled htmlFor={id} vertical= {vertical}  > {txt} </LabelInputToDoStyled>
-            <InputToDoStyled id={id} type={type} onChange={handleChange}  ></InputToDoStyled>
+            <InputToDoStyled id={id} type={type} onChange={handleChange} value={estado} ></InputToDoStyled>
         </ContenedorInputToDoStyled>
     )
 };
 
 
-const InputToDoDate = ({id, bool, vertical, setEstado}) =>{
+const InputToDoDate = ({id, bool, vertical, setEstado, setEstadoValue, estado}) =>{
     const txt = () =>{
         if(bool){
             return("Fecha de Termino");
@@ -177,13 +177,13 @@ const InputToDoDate = ({id, bool, vertical, setEstado}) =>{
         const [year, month, day] = valor.split('-');
 
         const fecha = new Date(year, month - 1, day); 
-        
+        setEstadoValue(valor);
         setEstado(fecha); // Guarda la fecha en el estado
     };
     return(
         <ContenedorInputToDoStyled vertical= {vertical}  >
             <LabelInputToDoStyled htmlFor={id} vertical= {vertical}  > {txt()} </LabelInputToDoStyled>
-            <InputToDoStyled id={id} type="date" onChange={handleChange}  ></InputToDoStyled>
+            <InputToDoStyled id={id} type="date" onChange={handleChange} value={estado} ></InputToDoStyled>
         </ContenedorInputToDoStyled>
     )
 };
@@ -309,36 +309,52 @@ const InputToDoSelectorBool = ({id, txt, type, vertical, bool, setBoolTareaRecur
 
 
 export const ModalAgregarToDo = () => {
-    const modalContainer = document.querySelector("#modalAgregarItem");
-    const {setSwitchModal, switchModal} = useContext(ContextoGeneral);
-    const [boolTareaRecurrente, setBoolTareaRecurrente] = useState(false);
-    const [txtTarea, setTxtTarea] = useState("");
-    const [estado, setEstado] = useState(false);
-    const [fecha, setFecha] = useState(new Date());
-    const [valor, setValor] = useState(3);
 
-    const { agregarDocumento, fnActualizadorTareas } = useContext(ContextoGeneral);
+    const { agregarDocumento, fnActualizadorTareas, actualizarDocumento, setSwitchModal, switchModal, tarea,tareaEnFoco } = useContext(ContextoGeneral);
+    console.log(tareaEnFoco);
+    const modalContainer = document.querySelector("#modalAgregarItem");
+    const [boolTareaRecurrente, setBoolTareaRecurrente] = useState(tareaEnFoco?.boolTareaRecurrente || false);
+    const [txtTarea, setTxtTarea] = useState(tareaEnFoco?.txtTarea || "");
+    const [estado, setEstado] = useState(tareaEnFoco?.estado || false);
+    const [fecha, setFecha] = useState(tareaEnFoco?.fecha || new Date());
+    const [fechaValue, setFechaValue] = useState(new Date());
+    const [valor, setValor] = useState(tareaEnFoco?.valor || 3);
+
+    useEffect(() => {
+        if (tareaEnFoco) {
+            setTxtTarea(tareaEnFoco?.txtTarea || "");
+            setBoolTareaRecurrente(tareaEnFoco?.boolTareaRecurrente || false);
+            setEstado(tareaEnFoco?.estado || false);
+            setFecha(tareaEnFoco?.fecha || new Date());
+           
+            setValor(tareaEnFoco?.valor || 3);
+        } else {
+            formateoDeEstados(); // Reinicia los estados si no hay `tareaEnFoco`
+        }
+    }, [tareaEnFoco]);
+   
 
     const formateoDeEstados = () =>{
         setTxtTarea("");
         setEstado(false);
         setBoolTareaRecurrente(false);
         setFecha(new Date() );
+        setFechaValue("");
         setValor(3);
     }
     
     const handleSubmit = (event) => {
-        event.preventDefault();
-        
-        console.log(boolTareaRecurrente);
-        console.log(txtTarea);
-        console.log(estado);
-        console.log(valor);
-        console.log(fecha);
-    
+        event.preventDefault();   
 
         const objTarea = {boolTareaRecurrente, txtTarea,estado, valor, fecha}
-        agregarDocumento(objTarea, boolTareaRecurrente);
+        
+
+        if(tareaEnFoco){
+            actualizarDocumento(tareaEnFoco.id, tareaEnFoco.boolTareaRecurrente, objTarea)
+        }else{
+            agregarDocumento(objTarea, boolTareaRecurrente);
+        }
+
         setSwitchModal(false);
         fnActualizadorTareas();
         formateoDeEstados();
@@ -359,11 +375,11 @@ export const ModalAgregarToDo = () => {
                     <BtnCerrarModalStyled onClick={handleClickBtnCerrar} > <IoCloseOutline /> </BtnCerrarModalStyled>
                     <Titulo>Ingresa una Tarea</Titulo>
 
-                    <InputToDoGenerico id='Descripción' txt = 'Descripción' type='text' setEstado = {setTxtTarea} />
+                    <InputToDoGenerico id='Descripción' txt = 'Descripción' type='text' setEstado = {setTxtTarea} estado = {txtTarea} />
                     
                     <ContenedorHorizontal>
                         <InputToDoSelectorBool vertical={"vertical"} txt = "Es diaria?" bool = {boolTareaRecurrente} setBoolTareaRecurrente = {setBoolTareaRecurrente}/>
-                        <InputToDoDate id='Fecha' txt = 'Fecha' type='date' vertical  bool  = {boolTareaRecurrente} setEstado = {setFecha} />
+                        <InputToDoDate id='Fecha' txt = 'Fecha' type='date' vertical  bool  = {boolTareaRecurrente} setEstado = {setFecha} estado = {fechaValue} setEstadoValue = {setFechaValue}  />
                     </ContenedorHorizontal>
 
                     <InputToDoRange id='Descripción' txt = 'Importancia' valor= {valor} setValor={setValor} vertical />
